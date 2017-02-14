@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="screen" title="no title">
+  </head>
+  <script  src="https://code.jquery.com/jquery-3.1.1.min.js"  crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <body>
+      <div class = "container">
+      <div class = "row">
+        <div class = "page-header">
+            <h1>Enter the Name of the User in order to extract his/her details. This application uses Git API for extracting the details of the user using jQuery AJAX.</h1>
+        </div>
+     </div>
+    <div class="container" id="container">
+      <form class="form-horizontal" id=formToSerialize>
+        <label for="username">Enter Username: </label>
+        <input id="username" name="username" type=text/>
+      </form>
+      <div>
+        <button id="get-data" class = "btn btn-primary">Get User</button>
+      </div>
+      <div class="row">
+        <img class="col-md-3" id="user-image" src="">
+      </div>
+        <div class = "row">
+        <h5 class="col-md-2" id="user-name"></h5>
+        <h5 class = "col-xs-2 col-sm-2 col-md-2 col-lg-2" id = "company-name"></h5>
+        <h5 class = "col-xs-2 col-sm-2 col-md-2 col-lg-2" id = "user-email"></h5>
+        <h5 class = "col-xs-2 col-sm-2 col-md-2 col-lg-2" id = "created-at"></h5>
+        <h5 class = "col-xs-2 col-sm-2 col-md-2 col-lg-2" id = "location"></h5>
+        <h5 class = "col-xs-2 col-sm-2 col-md-2 col-lg-2" id = "url"></h5>
+      </div>
+    </div>
+  </div>
+    <script>
+          $(document).ajaxStart(function(){
+        $("#user-image").attr("src","progress.gif");
+      }).ajaxStop(function(){
+        console.log("Ajax Stopped.")
+      }).ajaxSuccess(function(){
+        console.log("Ajax Success")
+      }).ajaxComplete(function(){
+        console.log("Ajax Completed")
+      })
+
+      $("#get-data").on("click",function(){
+        var username = $("#username").val();
+        console.log(username);
+        $.ajax({
+          url:"https://api.github.com/users/"+username,
+          success: function(data){
+            console.log(data)
+            $("#user-image").attr("src",data.avatar_url);
+            $("#user-name").text("User id is : "+data.id);
+              $("#company-name").text("Company is: "+data.company)
+              $("#user-email").text("User Email is : "+data.email)
+              $("#created-at").text("Acc created at : "+data.created_at)
+              $("#location").text("Location is: "+data.location)
+              $("#url").text("Acc url is: "+data.url)
+          },
+          error: function(){
+            $("#user-image").attr("src","no-user.png");
+            $("#user-name").text("User not found");
+          }
+        })
+      })
+    </script>
+ </body>
+</html>
